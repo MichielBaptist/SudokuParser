@@ -109,7 +109,7 @@ class ChopTrn(Transformation):
 
     def getParamListNCV(self):
         return [
-            (self.logStr("Padding"), "padding", 0, 50, -2)
+            (self.logStr("Padding"), "padding", 0, 50, 0)
         ]
 
     def imgBlock_index(self, i, j, bs_h, bs_w, img):
@@ -308,14 +308,16 @@ class CropTrn(Transformation):
         new_width = (int)(max(ut.eucl(tl, tr), ut.eucl(bl, br)) - 1)
         new_height= (int)(max(ut.eucl(tr, br), ut.eucl(tl, bl)) - 1)
 
+        mx = max(new_width, new_height)
+
         to = [
-            [0,                   0],
-            [new_width,           0],
-            [new_width,  new_height],
-            [0,          new_height]
+            [0,    0],
+            [mx,   0],
+            [mx,  mx],
+            [0,   mx]
         ]
         perspective =  cv.getPerspectiveTransform(np.float32(frm), np.float32(to))
-        return perspective, new_width, new_height
+        return perspective, mx, mx
 
     def findSudokuContour(self, contours, edges = None, hierarchy = None):
         return ut.max(contours, cv.contourArea)
@@ -331,8 +333,8 @@ class ResizeTrn(Transformation):
     def getParamListNCV(self):
         return [
             (self.logStr("Scale"), "scale", 0, 100, 100),
-            (self.logStr("Maximum width"), "mx_ver",0, 2000, 1000),
-            (self.logStr("Maximum height"), "mx_hor",0, 2000, 1000)
+            (self.logStr("Maximum width"), "mx_ver",0, 2000, 1300),
+            (self.logStr("Maximum height"), "mx_hor",0, 2000, 1300)
         ]
 
     def getScale(self):
