@@ -1,2 +1,2 @@
 # SudokuParser
-A simple sudoku parser
+A simple sudoku parser (WIP)
